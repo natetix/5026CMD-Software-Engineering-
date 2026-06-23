@@ -126,7 +126,7 @@
     <div class="dashboard">
 
         <h1 class="title">Admin Dashboard</h1>
-        <h3>Welcome Admin</h3>
+        <h3>Welcome <asp:Label ID="lblWelcome" runat="server"></asp:Label></h3>
 
         <!-- STAT CARDS -->
 
