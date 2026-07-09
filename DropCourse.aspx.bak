@@ -1,0 +1,62 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DropCourse.aspx.cs" Inherits="StudentManagementSystem.DropCourse" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Drop Course</title>
+    <style>
+        body { font-family: Arial; margin: 0; background-color: #f5f5f5; }
+        .menu { background-color: darkblue; padding: 15px; }
+        .menu a { color: white; text-decoration: none; margin-right: 25px; font-weight: bold; font-size: 16px; }
+        .content { padding: 30px; }
+        h2 { color: darkblue; }
+        .grid th { background-color: darkblue; color: white; padding: 10px; }
+        .grid td { padding: 8px; border: 1px solid #ccc; }
+        .grid { width: 100%; border-collapse: collapse; }
+        .btn-drop { background-color: red; color: white; border: none; padding: 5px 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<form id="form1" runat="server">
+
+    <div class="menu">
+        <a href="StudentDashboard.aspx">Dashboard</a>
+        <a href="CourseEnrollment.aspx">Course Enrollment</a>
+        <a href="ViewEnrolledCourses.aspx">View Enrolled Courses</a>
+        <a href="StudentViewMarks.aspx">My Marks</a>
+        <a href="StudentViewAttendance.aspx">My Attendance</a>
+        <a href="DropCourse.aspx">Drop Course</a>
+        <a href="StudentAnnouncements.aspx">Announcements</a>
+        <a href="StudentProfile.aspx">My Profile</a>
+    </div>
+
+    <div class="content">
+        <h2>Drop a Course</h2>
+        <p>Only <strong>Pending</strong> enrollments can be dropped.</p>
+
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Green" /><br /><br />
+
+        <asp:GridView ID="gvCourses" runat="server" AutoGenerateColumns="False" CssClass="grid"
+            OnRowCommand="gvCourses_RowCommand">
+            <Columns>
+                <asp:BoundField DataField="EnrolmentID" HeaderText="Enrolment ID" />
+                <asp:BoundField DataField="CourseCode" HeaderText="Code" />
+                <asp:BoundField DataField="CourseName" HeaderText="Course Name" />
+                <asp:BoundField DataField="SessionName" HeaderText="Session" />
+                <asp:BoundField DataField="Status" HeaderText="Status" />
+                <asp:TemplateField HeaderText="Action">
+                    <ItemTemplate>
+                        <asp:Button ID="btnDrop" runat="server" Text="Drop"
+                            CssClass="btn-drop"
+                            CommandName="DropCourse"
+                            CommandArgument='<%# Eval("DetailID") %>'
+                            OnClientClick="return confirm('Drop this course?');" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+        </asp:GridView>
+    </div>
+
+</form>
+</body>
+</html>

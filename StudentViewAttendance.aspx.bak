@@ -1,0 +1,63 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StudentViewAttendance.aspx.cs" Inherits="StudentManagementSystem.StudentViewAttendance" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>My Attendance</title>
+    <style>
+        body { font-family: Arial; margin: 0; background-color: #f5f5f5; }
+        .menu { background-color: darkblue; padding: 15px; }
+        .menu a { color: white; text-decoration: none; margin-right: 25px; font-weight: bold; font-size: 16px; }
+        .content { padding: 30px; }
+        h2 { color: darkblue; }
+        .grid th { background-color: darkblue; color: white; padding: 10px; }
+        .grid td { padding: 8px; border: 1px solid #ccc; }
+        .grid { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<form id="form1" runat="server">
+
+    <div class="menu">
+        <a href="StudentDashboard.aspx">Dashboard</a>
+        <a href="CourseEnrollment.aspx">Course Enrollment</a>
+        <a href="ViewEnrolledCourses.aspx">View Enrolled Courses</a>
+        <a href="StudentViewMarks.aspx">My Marks</a>
+        <a href="StudentViewAttendance.aspx">My Attendance</a>
+        <a href="DropCourse.aspx">Drop Course</a>
+        <a href="StudentAnnouncements.aspx">Announcements</a>
+        <a href="StudentProfile.aspx">My Profile</a>
+    </div>
+
+    <div class="content">
+        <h2>My Attendance Records</h2>
+        <p>Welcome, <strong><asp:Label ID="lblName" runat="server" /></strong></p>
+
+        <h3>Attendance Summary by Course</h3>
+        <asp:GridView ID="gvSummary" runat="server" AutoGenerateColumns="False" CssClass="grid">
+            <Columns>
+                <asp:BoundField DataField="CourseName" HeaderText="Course" />
+                <asp:BoundField DataField="CourseCode" HeaderText="Code" />
+                <asp:BoundField DataField="TotalClasses" HeaderText="Total Classes" />
+                <asp:BoundField DataField="Present" HeaderText="Present" />
+                <asp:BoundField DataField="Absent" HeaderText="Absent" />
+                <asp:BoundField DataField="AttendancePct" HeaderText="Attendance %" />
+            </Columns>
+        </asp:GridView>
+
+        <h3>Detailed Attendance Log</h3>
+        <asp:GridView ID="gvAttendance" runat="server" AutoGenerateColumns="False" CssClass="grid">
+            <Columns>
+                <asp:BoundField DataField="CourseName" HeaderText="Course" />
+                <asp:BoundField DataField="AttendanceDate" HeaderText="Date" DataFormatString="{0:dd/MM/yyyy}" />
+                <asp:BoundField DataField="Status" HeaderText="Status" />
+            </Columns>
+        </asp:GridView>
+
+        <asp:Label ID="lblNoData" runat="server" ForeColor="Gray"
+            Text="No attendance records found." Visible="false" />
+    </div>
+
+</form>
+</body>
+</html>

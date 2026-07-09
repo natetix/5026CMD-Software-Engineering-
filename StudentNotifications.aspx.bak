@@ -1,0 +1,152 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="StudentNotifications.aspx.cs" Inherits="StudentManagementSystem.StudentNotifications" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+
+    <title>My Notifications</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .menu {
+            background-color: darkblue;
+            padding: 15px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        h2 {
+            color: darkblue;
+        }
+
+        .notif-item {
+            background: white;
+            border-left: 5px solid darkblue;
+            border-radius: 5px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px lightgray;
+        }
+
+        .notif-unread {
+            border-left-color: #e53935;
+            background: #fff8f8;
+        }
+
+        .notif-read {
+            border-left-color: #aaa;
+            color: #555;
+        }
+
+        .notif-msg {
+            font-size: 15px;
+            margin: 0 0 5px 0;
+        }
+
+        .notif-meta {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .notif-category {
+            display: inline-block;
+            font-size: 11px;
+            background: darkblue;
+            color: white;
+            border-radius: 8px;
+            padding: 2px 8px;
+            margin-right: 8px;
+        }
+
+        .btn-markall {
+            background-color: darkblue;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .empty-msg {
+            color: #888;
+            font-style: italic;
+            font-size: 15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <div class="menu">
+        <a href="StudentDashboard.aspx">Dashboard</a>
+        <a href="CourseEnrollment.aspx">Course Enrollment</a>
+        <a href="ViewEnrolledCourses.aspx">Enrolled Courses</a>
+        <a href="StudentViewMarks.aspx">My Marks</a>
+        <a href="StudentViewAttendance.aspx">My Attendance</a>
+        <a href="StudentAnnouncements.aspx">Announcements</a>
+        <a href="StudentNotifications.aspx">Notifications</a>
+        <a href="StudentProfile.aspx">My Profile</a>
+    </div>
+
+    <div class="container">
+
+        <h2>My Notifications</h2>
+
+        <asp:Button ID="btnMarkAllRead"
+            runat="server"
+            Text="Mark All as Read"
+            CssClass="btn-markall"
+            OnClick="btnMarkAllRead_Click" />
+
+        <br /><br />
+
+        <asp:Label ID="lblMessage" runat="server" ForeColor="Green"></asp:Label>
+
+        <asp:Repeater ID="rptNotifications" runat="server">
+            <ItemTemplate>
+                <div class='notif-item <%# (bool)Eval("IsRead") ? "notif-read" : "notif-unread" %>'>
+                    <p class="notif-msg"><%# System.Web.HttpUtility.HtmlEncode(Eval("Message").ToString()) %></p>
+                    <div class="notif-meta">
+                        <span class="notif-category"><%# System.Web.HttpUtility.HtmlEncode(Eval("Category") != DBNull.Value ? Eval("Category").ToString() : "General") %></span>
+                        <%# Convert.ToDateTime(Eval("CreatedDate")).ToString("dd MMM yyyy, hh:mm tt") %>
+                        &nbsp;&mdash;&nbsp;
+                        <%# (bool)Eval("IsRead") ? "Read" : "<strong style='color:#e53935'>Unread</strong>" %>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </asp:Repeater>
+
+        <asp:Label ID="lblEmpty" runat="server" CssClass="empty-msg" Visible="false"
+            Text="You have no notifications."></asp:Label>
+
+    </div>
+
+</form>
+
+</body>
+
+</html>
