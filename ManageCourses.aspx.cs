@@ -47,32 +47,80 @@ namespace StudentManagementSystem
                 return;
             }
 
-            using (SqlConnection con = new SqlConnection(cs))
+            if (cr > 20)
             {
-                SqlCommand cmd;
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Credit hours must be 20 or less.";
+                return;
+            }
 
-                if (courseID == 0)
+            string code = txtCode.Text.Trim();
+            string name = txtName.Text.Trim();
+            string session = txtSession.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(name))
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Course Code and Course Name are required.";
+                return;
+            }
+
+            if (code.Length > 20)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Course Code must be 20 characters or fewer.";
+                return;
+            }
+
+            if (name.Length > 100)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Course Name must be 100 characters or fewer.";
+                return;
+            }
+
+            if (session.Length > 50)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Session must be 50 characters or fewer.";
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
                 {
-                    cmd = new SqlCommand(
-                        @"INSERT INTO Courses (CourseCode, CourseName, SessionName, CreditHours)
-                          VALUES (@Code, @Name, @Session, @CreditHours)", con);
-                }
-                else
-                {
-                    cmd = new SqlCommand(
-                        @"UPDATE Courses SET CourseCode=@Code, CourseName=@Name,
-                          SessionName=@Session, CreditHours=@CreditHours
-                          WHERE CourseID=@CourseID", con);
-                    cmd.Parameters.AddWithValue("@CourseID", courseID);
-                }
+                    SqlCommand cmd;
 
-                cmd.Parameters.AddWithValue("@Code", txtCode.Text.Trim());
-                cmd.Parameters.AddWithValue("@Name", txtName.Text.Trim());
-                cmd.Parameters.AddWithValue("@Session", txtSession.Text.Trim());
-                cmd.Parameters.AddWithValue("@CreditHours", cr);
+                    if (courseID == 0)
+                    {
+                        cmd = new SqlCommand(
+                            @"INSERT INTO Courses (CourseCode, CourseName, SessionName, CreditHours)
+                              VALUES (@Code, @Name, @Session, @CreditHours)", con);
+                    }
+                    else
+                    {
+                        cmd = new SqlCommand(
+                            @"UPDATE Courses SET CourseCode=@Code, CourseName=@Name,
+                              SessionName=@Session, CreditHours=@CreditHours
+                              WHERE CourseID=@CourseID", con);
+                        cmd.Parameters.AddWithValue("@CourseID", courseID);
+                    }
 
-                con.Open();
-                cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("@Code", code);
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.Parameters.AddWithValue("@Session", session);
+                    cmd.Parameters.AddWithValue("@CreditHours", cr);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SqlException)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Unable to save course. Please check your input and try again.";
+                return;
             }
 
             lblMessage.ForeColor = System.Drawing.Color.Green;

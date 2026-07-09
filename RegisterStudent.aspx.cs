@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace StudentManagementSystem
 {
@@ -33,6 +34,62 @@ namespace StudentManagementSystem
                 return;
             }
 
+            string name = txtName.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            string programme = txtProgramme.Text.Trim();
+            string phone = txtPhone.Text.Trim();
+            string ic = txtIC.Text.Trim();
+
+            if (name.Length > 100)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Name must be 100 characters or fewer.";
+                return;
+            }
+
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Please enter a valid email address.";
+                return;
+            }
+
+            if (email.Length > 100)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Email must be 100 characters or fewer.";
+                return;
+            }
+
+            if (phone.Length > 20)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Phone must be 20 characters or fewer.";
+                return;
+            }
+
+            if (ic.Length > 20)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "IC must be 20 characters or fewer.";
+                return;
+            }
+
+            using (SqlConnection checkCon = new SqlConnection(cs))
+            {
+                SqlCommand checkCmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM Students WHERE Email = @Email", checkCon);
+                checkCmd.Parameters.AddWithValue("@Email", email);
+                checkCon.Open();
+                int exists = (int)checkCmd.ExecuteScalar();
+                if (exists > 0)
+                {
+                    lblMessage.ForeColor = System.Drawing.Color.Red;
+                    lblMessage.Text = "Error: this email is already registered.";
+                    return;
+                }
+            }
+
             try
             {
                 using (SqlConnection con = new SqlConnection(cs))
@@ -42,12 +99,12 @@ namespace StudentManagementSystem
                         VALUES (@Name, @Email, @Password, @Programme, @Phone, @IC)";
 
                     SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@Name", txtName.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Name", name);
+                    cmd.Parameters.AddWithValue("@Email", email);
                     cmd.Parameters.AddWithValue("@Password", txtPassword.Text);
-                    cmd.Parameters.AddWithValue("@Programme", txtProgramme.Text.Trim());
-                    cmd.Parameters.AddWithValue("@Phone", txtPhone.Text.Trim());
-                    cmd.Parameters.AddWithValue("@IC", txtIC.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Programme", programme);
+                    cmd.Parameters.AddWithValue("@Phone", phone);
+                    cmd.Parameters.AddWithValue("@IC", ic);
 
                     con.Open();
                     cmd.ExecuteNonQuery();
@@ -57,6 +114,12 @@ namespace StudentManagementSystem
             {
                 lblMessage.ForeColor = System.Drawing.Color.Red;
                 lblMessage.Text = "Error: this email is already registered.";
+                return;
+            }
+            catch (SqlException)
+            {
+                lblMessage.ForeColor = System.Drawing.Color.Red;
+                lblMessage.Text = "Unable to register student. Please check your input and try again.";
                 return;
             }
 
