@@ -25,7 +25,12 @@ namespace StudentManagementSystem
                 return;
             }
 
-            courseID = Convert.ToInt32(Request.QueryString["CourseID"]);
+            // Guard: reject missing or non-numeric CourseID instead of crashing
+            if (!int.TryParse(Request.QueryString["CourseID"], out courseID))
+            {
+                Response.Redirect("ViewAssignedCourses.aspx");
+                return;
+            }
 
             // FIX 4: IDOR guard -- verify the logged-in lecturer is assigned to this course
             if (!IsLecturerAssignedToCourse(courseID))
