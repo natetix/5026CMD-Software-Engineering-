@@ -1,95 +1,44 @@
-﻿﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LecturerLogin.aspx.cs" Inherits="StudentManagementSystem.LecturerLogin" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LecturerLogin.aspx.cs" Inherits="StudentManagementSystem.LecturerLogin" %>
 
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html lang="en">
 <head runat="server">
-
-    <title>Lecturer Login</title>
-
-    <style>
-
-        body
-        {
-            font-family: Arial;
-            background-color: #f5f5f5;
-        }
-
-        .login-box
-        {
-            width: 350px;
-            margin: auto;
-            margin-top: 100px;
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px lightgray;
-        }
-
-        h2
-        {
-            color: darkblue;
-        }
-
-    </style>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lecturer Login &middot; SIMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/sims-theme.css" rel="stylesheet" />
 </head>
-
 <body>
-
 <form id="form1" runat="server">
+    <div class="sims-login-bg">
+        <div class="sims-login-card">
 
-    <div class="login-box">
+            <div class="sims-login-logo">SIMS</div>
+            <h1>Lecturer Portal</h1>
+            <p class="sims-login-sub">Student Information Management System</p>
 
-        <h2>Lecturer Login</h2>
+            <div class="mb-3">
+                <label class="form-label" for="<%= txtEmail.ClientID %>">Email</label>
+                <asp:TextBox ID="txtEmail" runat="server" CssClass="sims-input"
+                    placeholder="lecturer@gmail.com" />
+            </div>
 
-        <asp:Label ID="Label1"
-            runat="server"
-            Text="Email">
-        </asp:Label>
+            <div class="mb-3">
+                <label class="form-label" for="<%= txtPassword.ClientID %>">Password</label>
+                <asp:TextBox ID="txtPassword" runat="server" CssClass="sims-input"
+                    TextMode="Password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+            </div>
 
-        <br />
+            <asp:Button ID="btnLogin" runat="server" Text="Sign in"
+                CssClass="btn btn-sims w-100 py-2 mt-2" OnClick="btnLogin_Click" />
 
-        <asp:TextBox ID="txtEmail"
-            runat="server"
-            Width="300px">
-        </asp:TextBox>
+            <div class="text-center mt-3">
+                <asp:Label ID="lblMessage" runat="server" CssClass="sims-msg-err" />
+            </div>
 
-        <br /><br />
-
-        <asp:Label ID="Label2"
-            runat="server"
-            Text="Password">
-        </asp:Label>
-
-        <br />
-
-        <asp:TextBox ID="txtPassword"
-            runat="server"
-            Width="300px"
-            TextMode="Password">
-        </asp:TextBox>
-
-        <br /><br />
-
-        <asp:Button ID="btnLogin"
-            runat="server"
-            Text="Login"
-            Width="120px"
-            OnClick="btnLogin_Click" />
-
-        <br /><br />
-
-        <asp:Label ID="lblMessage"
-            runat="server"
-            ForeColor="Red">
-        </asp:Label>
-
+        </div>
     </div>
-
 </form>
-
 </body>
-
 </html>
